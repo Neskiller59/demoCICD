@@ -1,0 +1,26 @@
+name: symfony CI/CD
+on:
+  push:
+    branches:
+      - main
+  job:
+    build:
+      runs-on: ubuntu-latest
+      services:
+        mailog:
+          image: mailhog/mailhog
+          ports:
+            - 1025:1025
+            - 8025:8025
+          steps:
+            - uses: actions/checkout@v2
+            - name: Set up PHP
+              uses: shivammathur/setup-php@v2
+              with:
+                php-version: '8.3'
+            - name: Install dependencies
+              run: composer install
+            - name: Run tests
+              env:
+                MAILER_DSN: smtp://localhost:1025
+              run: php bin/phpunit
