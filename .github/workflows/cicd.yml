@@ -24,3 +24,21 @@ jobs:
         env:
           MAILER_DSN: smtp://localhost:1025
         run: php bin/phpunit
+  Docker-build-push:
+    runs-on: ubuntu-latest
+    needs: build-and-test
+    steps:
+      - uses: actions/checkout@v2
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERUSERNAME }}
+          password: ${{ secrets.DOCKERPASSWORD }}
+      - name: Build and push Docker image
+        uses: docker build -t ${{ secrets.DOCKER_USERNAME }}/my-symfony-app:latest .
+        with:
+          context: .
+          push: true
+          tags: ${{ secrets.DOCKER_USERNAME }}/my-symfony-app:latest
+
+    
