@@ -34,11 +34,11 @@ jobs:
         with:
           username: ${{ secrets.DOCKERUSERNAME }}
           password: ${{ secrets.DOCKERPASSWORD }}
-      - name: Build and push Docker image
-        uses: docker build -t ${{ secrets.DOCKER_USERNAME }}/my-symfony-app:latest .
-        with:
-          context: .
-          push: true
-          tags: ${{ secrets.DOCKER_USERNAME }}/my-symfony-app:latest
+      - name: Build Docker image
+        run: docker build -t ${{ secrets.DOCKERUSERNAME }}/my-symfony-app:latest .
+      - name: Push to Docker Hub
+        run: docker push ${{ secrets.DOCKERUSERNAME }}/my-symfony-app:latest
+
+       
 
     
